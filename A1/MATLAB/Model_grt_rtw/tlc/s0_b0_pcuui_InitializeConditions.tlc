@@ -1,0 +1,35 @@
+%implements s0_b0_pcuui_InitializeConditions "C"
+
+%function InitializeConditions(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+boolean_T tmp;
+int_T tmp_0;
+char *tmp_1;
+%closefile localVarDecl
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+/* InitializeConditions for SimscapeExecutionBlock: '<S2>/STATE_1' */
+tmp = %<(SLibCG_SE(SLibCGIRIsModeReferenceForASimstructBasedTarget()))>;
+if (tmp) {
+    tmp_0 = strcmp("ode14x", %<(RTMSolverGet("SolverName"))>);
+    if (tmp_0 != 0) {
+        tmp_1 = solver_mismatch_message("ode14x", %<(RTMSolverGet("SolverName"))>);
+        %<(LibSetRTModelErrorStatus("tmp_1"))>;
+    }
+}
+/* End of InitializeConditions for SimscapeExecutionBlock: '<S2>/STATE_1' */
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%<SLibInsertInitSystemMatricesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void InitializeConditions(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 1, fcnProtoType)>
+%<LibSetSystemField(system, "CachedInitializeLocalVars", localVarDecl)>
+%endfunction

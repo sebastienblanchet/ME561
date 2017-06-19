@@ -1,0 +1,67 @@
+%implements s0_b0_pcuui_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+NeslSimulationData *simulationData;
+real_T time;
+boolean_T tmp;
+int_T tmp_0;
+NeuDiagnosticManager *diagnosticManager;
+NeuDiagnosticTree *diagnosticTree;
+int32_T tmp_1;
+char *msg;
+%closefile localVarDecl
+/* SimscapeExecutionBlock: '<S2>/STATE_1' */
+simulationData = (NeslSimulationData *)Model_DW.STATE_1_SimulationData;
+time = %<(SLibCG_SE(LibGetT()))>;
+simulationData->mData->mTime.mN = 1;
+simulationData->mData->mTime.mX = &time;
+simulationData->mData->mContStates.mN = 31;
+simulationData->mData->mContStates.mX = (real_T *)&Model_X.ModelHydraulic_Pipelinech_Adiam;
+simulationData->mData->mDiscStates.mN = 0;
+simulationData->mData->mDiscStates.mX = NULL;
+simulationData->mData->mModeVector.mN = 204;
+simulationData->mData->mModeVector.mX = (int32_T *)&Model_DW.STATE_1_Modes;
+tmp = %<(SLibCG_SE(SLibCGIRGetSolverFoundZcEvents()))>;
+simulationData->mData->mFoundZcEvents = tmp;
+simulationData->mData->mIsMajorTimeStep = %<(SLibCG_SE(LibIsMajorTimeStep()))>;
+tmp = %<(SLibCG_SE(SLibCGIRGetSolverAssertCheck()))>;
+simulationData->mData->mIsSolverAssertCheck = tmp;
+simulationData->mData->mIsSolverCheckingCIC = false;
+tmp = %<(SLibCG_SE(RTMSolverIs("ComputingJacobian")))>;
+simulationData->mData->mIsComputingJacobian = tmp;
+simulationData->mData->mIsSolverRequestingReset = false;
+tmp_0 = 0;
+simulationData->mData->mInputValues.mN = 0;
+simulationData->mData->mInputOffsets.mN = 1;
+simulationData->mData->mInputOffsets.mX = &tmp_0;
+simulationData->mData->mOutputs.mN = 235;
+simulationData->mData->mOutputs.mX = &Model_B.STATE_1[0];
+simulationData->mData->mSampleHits.mN = 0;
+simulationData->mData->mSampleHits.mX = NULL;
+simulationData->mData->mIsFundamentalSampleHit = false;
+diagnosticManager = (NeuDiagnosticManager *)Model_DW.STATE_1_DiagnosticManager;
+diagnosticTree = neu_diagnostic_manager_get_initial_tree(diagnosticManager);
+tmp_1 = ne_simulator_method((NeslSimulator *)Model_DW.STATE_1_Simulator, NESL_SIM_OUTPUTS, simulationData, diagnosticManager);
+if (tmp_1 != 0) {
+    tmp = error_buffer_is_empty(%<(LibGetRTModelErrorStatus())>);
+    if (tmp) {
+        msg = rtw_diagnostics_msg(diagnosticTree);
+        %<(LibSetRTModelErrorStatus("msg"))>;
+    }
+}
+/* End of SimscapeExecutionBlock: '<S2>/STATE_1' */
+%<SLibInsertSolverResetCode()>\
+%closefile cfgTxt
+%<cfgTxt>
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Outputs(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 2, fcnProtoType)>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction

@@ -1,0 +1,19 @@
+%implements s0_b0_pcuui_Terminate "C"
+
+%function Terminate(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* Terminate for SimscapeExecutionBlock: '<S2>/STATE_1' */
+neu_destroy_diagnostic_manager((NeuDiagnosticManager *)Model_DW.STATE_1_DiagnosticManager);
+nesl_destroy_simulation_data((NeslSimulationData *)Model_DW.STATE_1_SimulationData);
+nesl_erase_simulator("Model/Solver Configuration_1");
+%closefile cfgTxt
+%<cfgTxt>
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Terminate(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 7, fcnProtoType)>
+%endfunction

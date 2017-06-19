@@ -1,0 +1,104 @@
+%implements s0_b0_pcuui_Start "C"
+
+%function Start(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+NeslSimulator *tmp;
+NeuDiagnosticManager *diagnosticManager;
+real_T modelParameters_mSolverToleranc;
+real_T modelParameters_mFixedStepSize;
+boolean_T modelParameters_mVariableStepSo;
+NeuDiagnosticTree *diagnosticTree;
+int32_T tmp_0;
+char *msg;
+NeslSimulationData *simulationData;
+real_T time;
+NeModelParameters expl_temp;
+NeParameterBundle expl_temp_0;
+%closefile localVarDecl
+/* Start for SimscapeExecutionBlock: '<S2>/STATE_1' */
+tmp = nesl_lease_simulator("Model/Solver Configuration_1", 0, 0);
+Model_DW.STATE_1_Simulator = (void *)tmp;
+modelParameters_mVariableStepSo = pointer_is_null(Model_DW.STATE_1_Simulator);
+if (modelParameters_mVariableStepSo) {
+    Model_4363cb6f_1_gateway();
+    tmp = nesl_lease_simulator("Model/Solver Configuration_1", 0, 0);
+    Model_DW.STATE_1_Simulator = (void *)tmp;
+}
+simulationData = nesl_create_simulation_data();
+Model_DW.STATE_1_SimulationData = (void *)simulationData;
+diagnosticManager = rtw_create_diagnostics();
+Model_DW.STATE_1_DiagnosticManager = (void *)diagnosticManager;
+modelParameters_mSolverToleranc = %<(SLibCG_SE(SLibCGIRGetVarStepSolverPropertyValue("RelTol", "0.001")))>;
+modelParameters_mFixedStepSize = %<(SLibCG_SE(SLibCGIRGetFixStepSolverPropertyValue("FixedStep", "0.0")))>;
+modelParameters_mVariableStepSo = %<(SLibCG_SE(SLibCGIRHasCompiledModelPropertyValue("SolverType", "VariableStep")))>;
+diagnosticManager = (NeuDiagnosticManager *)Model_DW.STATE_1_DiagnosticManager;
+diagnosticTree = neu_diagnostic_manager_get_initial_tree(diagnosticManager);
+expl_temp.mVariableStepSolver = modelParameters_mVariableStepSo;
+expl_temp.mUseSimState = false;
+expl_temp.mStartTime = 0.0;
+expl_temp.mSolverType = NE_SOLVER_TYPE_DAE;
+expl_temp.mSolverTolerance = modelParameters_mSolverToleranc;
+expl_temp.mLoggingMode = SSC_LOGGING_ALL;
+expl_temp.mLoadInitialState = false;
+expl_temp.mLinTrimCompile = false;
+expl_temp.mFixedStepSize = modelParameters_mFixedStepSize;
+tmp_0 = nesl_initialize_simulator((NeslSimulator *)Model_DW.STATE_1_Simulator, expl_temp, diagnosticManager);
+if (tmp_0 != 0) {
+    modelParameters_mVariableStepSo = error_buffer_is_empty(%<(LibGetRTModelErrorStatus())>);
+    if (modelParameters_mVariableStepSo) {
+        msg = rtw_diagnostics_msg(diagnosticTree);
+        %<(LibSetRTModelErrorStatus("msg"))>;
+    }
+}
+expl_temp_0.mRealParameters.mN = 0;
+expl_temp_0.mRealParameters.mX = NULL;
+expl_temp_0.mLogicalParameters.mN = 0;
+expl_temp_0.mLogicalParameters.mX = NULL;
+expl_temp_0.mIntegerParameters.mN = 0;
+expl_temp_0.mIntegerParameters.mX = NULL;
+expl_temp_0.mIndexParameters.mN = 0;
+expl_temp_0.mIndexParameters.mX = NULL;
+nesl_simulator_set_rtps((NeslSimulator *)Model_DW.STATE_1_Simulator, expl_temp_0);
+simulationData = (NeslSimulationData *)Model_DW.STATE_1_SimulationData;
+time = %<(SLibCG_SE(LibGetT()))>;
+simulationData->mData->mTime.mN = 1;
+simulationData->mData->mTime.mX = &time;
+simulationData->mData->mContStates.mN = 31;
+simulationData->mData->mContStates.mX = (real_T *)&Model_X.ModelHydraulic_Pipelinech_Adiam;
+simulationData->mData->mDiscStates.mN = 0;
+simulationData->mData->mDiscStates.mX = NULL;
+simulationData->mData->mModeVector.mN = 204;
+simulationData->mData->mModeVector.mX = (int32_T *)&Model_DW.STATE_1_Modes;
+modelParameters_mVariableStepSo = %<(SLibCG_SE(SLibCGIRGetSolverFoundZcEvents()))>;
+simulationData->mData->mFoundZcEvents = modelParameters_mVariableStepSo;
+simulationData->mData->mIsMajorTimeStep = %<(SLibCG_SE(LibIsMajorTimeStep()))>;
+modelParameters_mVariableStepSo = %<(SLibCG_SE(SLibCGIRGetSolverAssertCheck()))>;
+simulationData->mData->mIsSolverAssertCheck = modelParameters_mVariableStepSo;
+simulationData->mData->mIsSolverCheckingCIC = false;
+modelParameters_mVariableStepSo = %<(SLibCG_SE(RTMSolverIs("ComputingJacobian")))>;
+simulationData->mData->mIsComputingJacobian = modelParameters_mVariableStepSo;
+simulationData->mData->mIsSolverRequestingReset = false;
+diagnosticManager = (NeuDiagnosticManager *)Model_DW.STATE_1_DiagnosticManager;
+diagnosticTree = neu_diagnostic_manager_get_initial_tree(diagnosticManager);
+tmp_0 = ne_simulator_method((NeslSimulator *)Model_DW.STATE_1_Simulator, NESL_SIM_INITIALIZEONCE, simulationData, diagnosticManager);
+if (tmp_0 != 0) {
+    modelParameters_mVariableStepSo = error_buffer_is_empty(%<(LibGetRTModelErrorStatus())>);
+    if (modelParameters_mVariableStepSo) {
+        msg = rtw_diagnostics_msg(diagnosticTree);
+        %<(LibSetRTModelErrorStatus("msg"))>;
+    }
+}
+/* End of Start for SimscapeExecutionBlock: '<S2>/STATE_1' */
+%closefile cfgTxt
+%<cfgTxt>
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Start(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 0, fcnProtoType)>
+%<LibSetSystemField(system, "CachedStartLocalVars", localVarDecl)>
+%endfunction
