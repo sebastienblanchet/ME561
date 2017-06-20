@@ -1,6 +1,344 @@
 %-----------------------------------------------------------------------------------------------------------------
-%% Section 1 : Introduction
+%% Section 1
 \chapter{Question 1}
 \label{chap:q1}
 
-Given the schematic in \cite{assign}, properties as per \citep{fluids}.
+The constant parameters are summarized below in Table~\ref{tab:q1param} as per \cite{assign}.
+
+\begin{table}[H]
+  \centering
+  \caption{Constant parameters for Question 1.}
+    \begin{tabular}{cccc}
+	\toprule    
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Tubing diameter 		& $D$     & 1.25  & in \\
+    Specific gravity 		& $SG$    & 0.875  & - \\
+    Kinematic viscosity 	& $\nu$    & 110   & cS \\
+    Length of tube 			& $L$     & 55    & ft \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q1param}
+\end{table}
+
+The foregoing subsections will use these values. Also note that all equations presented in this report are from \cite{formula}, unless stated otherwise.
+
+\section{Part A}
+\label{sect:1a}
+
+It is first required to calculate the maximum velocity. This is by rearranging the formula for the Reynolds number as per \ref{eq:re}.
+
+\begin{equation}
+	\label{eq:re}
+	Re = \frac{v_{max}D}{\nu} \Rightarrow v_{max} = \frac{1}{7740} \frac{\nu Re}{D}
+\end{equation}
+
+Must use a factor of 1/7740 to convert [cS/in] to [ft/s]. Since it is stated that the flow is kept at the upper limit of the laminar flow range \cite{assign}, the Reynolds number is set to be $Re=2000$ \cite{fluids}.\\
+
+From this, the maximum volumetric flow rate is calculated with \ref{eq:flowq}.
+
+\begin{equation}
+	\label{eq:flowq}
+	Q_{max} =  \frac{449}{144} v_{max} A	
+\end{equation} 
+
+Where the piping area $ A = \frac{\pi D^2}{4}$ [in]. The above equation yields [$\Unit{\frac{ft^3}{s}}$] hence to get [gpm] is is required to multiply by 449/144. Using \cite{excel}, calculated maximum velocity, area and flow rate are summarized below in Table~\ref{tab:q1ans1}.
+
+\begin{table}[H]
+  \centering
+  \caption{Calculated velocity, area and volumetric flow rate.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Maximum velocity	& $v_{max}$	& 22.739	& ft/s \\
+    Pipe area 			& $A$     	& 1.227 	& $\Unit{in^2}$ \\
+    Maximum flow 		& $Q_{max}$	& 87.009 	& gpm \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q1ans1}
+\end{table}
+
+Next, it is first required to calculate the total head loss $h_l$ throughout the pipe to get the pressure drop $\Delta p$.
+
+\begin{equation}
+	\label{eq:q1headloss}	
+	h_L = \left( \sum_{i=1}^{n} K_i \right) \frac{v^2}{2g} 
+\end{equation}
+
+Each component in the heat exchanger's circuit will have their own minor loss factor $K$. It is also required to calculate the overall factor for the pipe loss $K_{PL}$ defined as \ref{eq:q1kpipeloss}.
+
+\begin{equation}
+	\label{eq:q1kpipeloss}	
+	K_{PL} = f \frac{L}{D} = 12 \frac{SL}{Re D}
+\end{equation}
+
+Where $S,L$ are the pipe's shape factor and length respectively. Recall $f=S/Re$. A factor of 12 is added to convert diameter from [in] to [ft].\\
+
+The following table shows the value for all $K_i$ factors below in Table~\ref{tab:kfact} are determined by interpolating values from Table~6.5 of \cite{fluids}. Note control valve factor $K_V$ from \cite{assign}.
+
+\begin{table}[H]
+  \centering
+  \caption{$K$ factors for heat exchanger circuit components.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Factor} & \textbf{Symbol} & \textbf{Value } & \textbf{Qty.} \\
+    \midrule
+    Control valve & $K_V$ & 0.920 & 1 \\
+    Tee   & $K_T$ & 1.700 & 1 \\
+    Elbow, 90 degrees & $K_E$ & 1.363 & 3 \\
+    Check valve, open & $K_{CV}$ & 2.700 & 1 \\
+    Globe valve, open & $K_{GV}$ & 7.875 & 2 \\
+    Pipe loss & $K_{PL}$ & 16.896 & 1 \\
+    Sum product  & $\Sigma K_i$   & 42.054 & - \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:kfact}
+\end{table}
+
+From this, the total head loss can be calculated with Equation~\ref{eq:q1headloss} and the total pressure loss with Equation~\ref{eq:q1ploss}. 
+
+\begin{equation}
+	\label{eq:q1ploss}	
+	\Delta p = \frac{1}{144}\gamma_f h_L + \Delta p_F + \Delta p_{HE} 
+\end{equation}
+
+Where $\gamma_f = SG\  \gamma_{H20} \ [\Unit{lb/ft^3}]$ and calculated from \cite{fluids} and Table~\ref{tab:q1param}. A factor of 1/144 is used to convert [$\Unit{lb/ft^2}$] to [$\Unit{lb/in^2}$] or [psi]. Pressure losses caused by the filter $\Delta p_F$ and heat exchanger $\Delta p_{HE}$ are given in \cite{assign} as 5.5 and 40 [psi], respectively. Calculations are summarized below in Table~\ref{tab:q1plossa}
+
+\begin{table}[H]
+  \centering
+  \caption{Calculated specific weight, head and pressure losses.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value} & \textbf{Unit} \\
+    \midrule
+    Fluid specific weight & $\gamma_f$ & 54.618 & $\Unit{lb/ft^3}$\\
+    Head loss & $h_L$ & 337.917 & ft \\
+    Pressure loss & $\Delta p$ & 173.668 & psi \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q1plossa}
+\end{table}
+
+\section{Part B}
+\label{sect:1b}
+
+The procedure outlined in Section~\ref{sect:1a} is repeated for a $Re = 1150$ as a result of 15 \% draining thorough the relief valve. Based on this, the following expressions for circuit $Q_C$ and relief valve $Q_{RV}$  flow rates may be written.
+
+\begin{equation}
+	\label{eq:1bqc}
+	Q_C = 0.85 Q_{max} \Rightarrow v_C = 0.85 v_{max}
+\end{equation}
+
+\begin{equation}
+	\label{eq:1bqrv}
+	Q_{RV} = 0.15 Q_{max} \Rightarrow v_{RV} = 0.15 v_{max}
+\end{equation}
+
+Using Equations~\ref{eq:re}, \ref{eq:flowq}, \ref{eq:1bqc} and \ref{eq:1bqrv}, the following velocity and flow rates are calculated (see Table~\ref{tab:q2flow}).
+
+\begin{table}[H]
+  \centering
+  \caption{Calculated velocity and flow rate values.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Maximum velocity & $v_{max}$ & 13.075 & ft/s \\
+    Circuit velocity & $v_C$   & 11.114 &  ft/s  \\
+    Relief valve velocity & $v_{RV}$  & 1.961 &  ft/s  \\
+	Maximum flow & $Q_{max}$ & 50.030 & gpm \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q2flow}
+\end{table}
+
+The $K$ factors for the tee, 90 degree elbows and open check, globe, control valves are constant however, the new Reynolds number will change the pipe's minor loss factor $K_{PL}$. Also, an added factor $K_{RV}$ caused by the 5 [ft] length relief valve return length ($Re_{RV}= 0.15 Re$) \ref{{eq:q1krv}}.
+
+\begin{equation}
+	\label{eq:q1krv}	
+	K_{RV} = f \frac{L_{RV}}{D} = 12 \frac{SL}{Re_{RV} D} = 80 \frac{SL}{Re D} 
+\end{equation}
+
+\begin{equation}
+	\label{eq:q1hlrv}	
+	h_{L_{RV}} = K_{RV} \frac{v_{RV}^2}{2g} 
+\end{equation}
+
+
+\begin{equation}
+	\label{eq:q1plossb}	
+	\Delta p = \frac{1}{144}\gamma_f \left( h_{L_C} + h_{L_{RV}} \right) + \Delta p_F + \Delta p_{HE} 
+\end{equation}
+
+Again, applying Equations~\ref{eq:q1headloss}, \ref{eq:q1kpipeloss} and \ref{eq:q1plossb} yields the following results (see Table~\ref{tab:q1plossb}).
+
+
+\begin{table}[H]
+  \centering
+  \caption{New loss calculated results.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Pipe loss factor & $K_{PL}$ &  & - \\
+    Relief valve factor & $K_{RV}$   & & - \\
+    Sum product  & $\Sigma K_i$   &  & - \\
+    Head loss & $h_L$ &  & ft \\
+    Pressure loss & $\Delta p$ &  & psi \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q1plossb}
+\end{table}
+
+When comparing results from Tables~\ref{tab:q1plossa} with \ref{tab:q1plossb}.
+
+%-----------------------------------------------------------------------------------------------------------------
+%% Section 2
+\chapter{Question 2}
+\label{chap:q2}
+
+The constant parameters are summarized below in Table~\ref{tab:q2param} as per \cite{assign}.
+
+\begin{table}[H]
+  \centering
+  \caption{Constant parameters for Question 2.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Actual flow & $Q_A$     & 50    & lpm \\
+    Fluid pressure & $p$     & 210   & bar \\
+    Pump speed & $N$     & 1700  & rpm \\
+	Volumetric efficiency & $\eta_V$     & 100  & \% \\
+	Mechanical efficiency & $\eta_m$     & 90  & \% \\
+	Pump leakage & $Q_L$     & 4  & lpm \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q2param}
+\end{table}
+
+\section{Part A}
+\label{sect:2a}
+
+It is required to find the required pump displacement. Must calculate the theoretical volumetric flow rate before with Equation~\ref{eq:q2qt}). 
+
+\begin{equation}
+	\label{eq:q2qt}
+	\eta_V = \frac{Q_A}{Q_T} \Rightarrow Q_T = \frac{Q_A}{\eta_V}
+\end{equation}
+
+With $Q_T$ , the pump displacement is calculated with \ref{eq:q2disp}.
+\begin{equation}
+	\label{eq:q2disp}
+	Q_T = V_D N \Rightarrow V_D = \frac{1}{1000}\frac{Q_T}{N}
+\end{equation}
+
+A factor of 1/1000 is added to convert [l/rev] to [$\Unit{m^3/rev}$].\\
+
+Results in Table~\ref{tab:q2a}.
+
+\begin{table}[H]
+  \centering
+  \caption{Calculated theoretical flow rate and displacement.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Theoretical volumetric flow rate & $Q_T$ & 50    & lpm \\
+    Pump displacement & $V_D$ & 2.941E-05 & $\Unit{m^3/rev}$ \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q2a}
+\end{table}
+
+
+\section{Part B}
+\label{sect:2b}
+
+Due to a 4 [lpm] leakage, the new theoretical flow rate $Q_T$ is $Q_A+Q_L=54$ [lpm]. From this, a new volumetric displacement $V_D$ is calculated with \ref{eq:q2disp}. With this new displaement the theoretical torque $T_T$ is calculated with \ref{eq:q2tt}
+
+\begin{equation}
+	\label{eq:q2tt}
+	T_T = 10^5 \cdot \frac{p V_D}{2 \pi}
+\end{equation}
+
+The actual torque $T_A$ with \ref{eq:q2ta}.
+\begin{equation}
+	\label{eq:q2ta}
+	T_A = \frac{T_T}{\eta_m}
+\end{equation}
+
+Finally the motor power $P$ with \ref{eq:q2pw}.
+\begin{equation}
+	\label{eq:q2pw}
+	P = \frac{1}{746} T_A N
+\end{equation}
+
+Calculated values using Equations \ref{eq:q2disp}, \ref{eq:q2tt}, \ref{eq:q2ta} and \ref{eq:q2pw} are summarized below in Table~\ref{tab:q2b}.
+
+\begin{table}[H]
+  \centering
+  \caption{Calculated results for Question 2b.}
+    \begin{tabular}{cccc}
+    \toprule
+    \textbf{Description} & \textbf{Symbol} & \textbf{Value } & \textbf{Unit} \\
+    \midrule
+    Theoretical volumetric flow rate & $Q_T$ & 54    & lpm \\
+    Pump speed & $N$   & 178.024 & rad/s \\
+    Pump displacement & $V_D$ & 3.176E-05 &$\Unit{m^3/rev}$\\
+    Theoretical  torque & $T_T$ & 106.166 & Nm \\
+    Theoretical  torque & $T_A$ & 117.962 & Nm \\
+    Motor power & $P$   & 28.161 & HP \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:q2b}
+\end{table}
+
+
+%-----------------------------------------------------------------------------------------------------------------
+%% Section 3
+\chapter{Question 3}
+\label{chap:q3}
+
+The model seen below in Figure~\ref{fig:simulink} was prepared with Simscape Fluids \cite{simulink} as per schematic in \cite{assign}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.45]{Simulink}
+	\caption{Simulink model.}
+	\label{fig:simulink}
+\end{figure}
+
+A series of simulations with the above model are explored in the following sections.
+
+
+\section{Part A}
+\label{sect:3a}
+
+With the model from Figure~\ref{fig:simulink}, a 20 second simulation is completed. Pressure loss, tank volume and flow rates are plotted for all flow rate values (see Figure~\ref{fig:plot150}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.75]{plot150}
+	\caption{Pressure loss, tank volume and flow rate plots for $D=1.50$ in.}
+	\label{fig:plot150}
+\end{figure}
+
+Comment on plots.
+
+\section{Part B}
+\label{sect:3b}
+
+Figure~\ref{fig:plot075}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.75]{plot075}
+	\caption{Pressure loss, tank volume and flow rate plots for $D=0.75$ in.}
+	\label{fig:plot075}
+\end{figure}
+
+Comment on plots.
+
+
