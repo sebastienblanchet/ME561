@@ -50,6 +50,8 @@
 % for properly formated section begining
 \usepackage{titlesec}
 \titleformat{\chapter}{\bf\normalfont\LARGE}{\bf\thechapter.}{20pt}{\LARGE\bf}
+\titlespacing*{\chapter}{0pt}{0pt}{12pt}
+\titlespacing*{\section}{0pt}{*1}{*1}
 % for appendices
 \usepackage[toc,page]{appendix}
 % for pdf import
@@ -81,12 +83,11 @@
 \setcounter{tocdepth}{3}
 \setcounter{secnumdepth}{3}
 %% TOC LOF LOT
-%\intotoc{\contentsname}% add a corresponding item to the contents table and bookmark
-%\tableofcontents% contents catalog
-%\intotoc{\listfigurename}% add a corresponding item to the contents table and bookmark
-%\listoffigures% figures catalog
-%\intotoc{\listtablename}% add a corresponding item to the contents table and bookmark
-%\listoftables% tables catalog
+\tableofcontents% contents catalog
+\intotoc{\listfigurename}% add a corresponding item to the contents table and bookmark
+\listoffigures% figures catalog
+\intotoc{\listtablename}% add a corresponding item to the contents table and bookmark
+\listoftables% tables catalog
 
 %%%%% --------------------------------------------------------------------------------
 
@@ -101,7 +102,6 @@
 %%% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 \input{Tex/MainMatter}
 %%% ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 
 %%%%% --------------------------------------------------------------------------------
